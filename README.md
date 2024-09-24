@@ -93,6 +93,8 @@ List<Member> result = em.createQuery("select m from Member as m", Member.class)
  3. SQL은 데이터베이스 테이블을 대상으로 쿼리
  4. PQL을 한마디로 정의하면 객체 지향 SQL
 
+# 영속성 컨텍스트 1
+
 ## JPA 가장 주용한 2가지
  1. 객체와 관계형 데이터베이스 매핑하기
  2. 영속성 컨텍스트
@@ -136,4 +138,68 @@ em.getTransaction().begin();
 //객체를 저장한 상태(영속)
 em.persist(member);
 ```
+
+# 영속성 컨텍스트 2
+
+## 1차 캐시 조회
+- 1차 캐시안에 저장된다
+```
+Member member = new Member();
+member.setId("member1");
+member.setUsername("회원1");
+
+//1차 캐시에 저장됨
+em.persist(member);
+
+//1차 캐시에서 조회
+Member findMember = em.find(Member.class, "member1");
+```
+
+## 영속성 엔티티의 동일성 보장
+- 자바 컬렉션에서 똑같은 래퍼런스가 같은거 처럼 동일성을 보장한다.
+```
+Member a = em.find(Member.class, "member1");
+Member b = em.find(Member.class, "member1");
+System.out.println(a == b); //동일성 비교 true
+
+```
+
+## 엔티티 등록: 트랜잭션을 지원하는 쓰기 지연
+```
+EntityManager em = emf.createEntityManager();
+EntityTransaction transaction = em.getTransaction();
+//엔티티 매니저는 데이터 변경시 트랜잭션을 시작해야 한다.   
+transaction.begin(); // [트랜잭션] 시작
+
+em.persist(memberA);
+em.persist(memberB);
+
+//여기까지 INSERT SQL을 데이터베이스에 보내지 않는다.
+//커밋하는 순간 데이터베이스에 INSERT SQL을 보낸다.
+
+transaction.commit(); // [트랜잭션] 커밋
+```
+
+## 엔티티 수정: 변경 감지
+- 데이터를 찾아 온 다음에 값만 변경하면 값이 변경된다.
+- update같은건 필요 없다.
+- 1차 캐시에서 저장되어있는 데이터와 변경된 데이터가 있으면 update 쿼리를 생성하고 커밋하여 데이터베이스에 저장한다.
+- em.persist를 호출하지 않아도 된다.
+- 트랜잭션의 커밋되는 시점에 적용된다.
+```
+EntityManager em = emf.createEntityManager();
+EntityTransaction transaction = em.getTransaction();
+
+transaction.begin(); // [트랜잭션] 시작
+
+// 영속 엔티티 조회
+Member memberA = em.find(Member.class, "memberA");
+
+// 영속 엔티티 데이터 수정
+memberA.setUsername("hi");
+memberA.setAge(10);
+
+transaction.commit(); // [트랜잭션] 커밋
+```
+
 

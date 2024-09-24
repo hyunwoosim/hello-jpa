@@ -17,13 +17,12 @@ public class JpaMain {
         tx.begin();
 
         try {
-            // 비영속
-            Member member = new Member();
-            member.setId(100L);
-            member.setName("HelloJPA");
+            Member member = em.find(Member.class, 150L);
+            member.setName("ZZZZZZ");
 
-            // 영속
             em.persist(member);
+
+            System.out.println("====================");
 
             tx.commit();
 
