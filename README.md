@@ -92,3 +92,48 @@ List<Member> result = em.createQuery("select m from Member as m", Member.class)
  2. JPQL은 엔티티 객체를 대상으로 쿼리
  3. SQL은 데이터베이스 테이블을 대상으로 쿼리
  4. PQL을 한마디로 정의하면 객체 지향 SQL
+
+## JPA 가장 주용한 2가지
+ 1. 객체와 관계형 데이터베이스 매핑하기
+ 2. 영속성 컨텍스트
+
+## 영속성 컨텍스트
+    - JPA를 이해하는데 가장 중요한 용어
+    - 엔티티를 영구저장하는 환경 이라는 뜻
+    - EntityManager.persist(entity);
+
+## J2SE 환경
+    - 엔티티 매니저와 영속성 컨텍스가 1:1
+    - EntityManager가 생성되면 PersistenceContext도 함께 생성된다. 
+
+## 엔티티의 생명주기 
+ 1. 비영속(new/transient)
+    - 영속성 컨텍스트와 전혀 관계가 없는 새로운 상태
+ 2. 영속(managed)
+    - 영속성 컨텍스트에 관리되는 상태
+ 3. 준영속(detached)
+    - 영속성 컨텍스트에 저장되었다가 분리된 상태
+ 4. 삭제(removed)
+    - 삭제된 상태
+
+## 비영속
+    - 객체를 생성한 상태(비영속)
+```
+Member member = new Member();
+member.setId("member1");
+member.setUsername("회원1");
+```
+
+## 영속
+```
+Member member = new Member();
+member.setId("member1");
+member.setUsername(“회원1”);
+
+EntityManager em = emf.createEntityManager();
+em.getTransaction().begin();
+
+//객체를 저장한 상태(영속)
+em.persist(member);
+```
+
