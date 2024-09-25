@@ -288,19 +288,20 @@ Hibernate:
 # 필드와 컬럼 매핑
 
 ## @Column
-    1. name : 필드와 매핑할 테이블의 컬럼 이름
-    2. insertable : 등록 가능 여부 default는 true
-    3. updatable : 변경 가능 여부 default는 true
-    4. nullable(DDL) : null 값의 허용 여부를 설정한다. false로 설정하면 DDL 생성 시에 not null 제약조건이 붙는다
-    5. unique(DDL) : @Table의 uniqueConstraints와 같지만 한 컬럼에 간단히 유니크 제 약조건을 걸 때 사용한다.
-        - 잘 사용하지 않는다.(이름이 이상한 이름으로 나온다.)
-    6. length(DDL) : 문자 길이 제약조건, String 타입에만 사용한다. defalut 값은 255
-    7. columnDefinition (DDL) : 데이터베이스 컬럼 정보를 직접 줄 수 있다.   ex) varchar(100) default ‘EMPTY'
-    8. precision, scale(DDL) : 아주 큰 숫자나 소수점을 사용할 때 사용한다.
+1. name : 필드와 매핑할 테이블의 컬럼 이름
+2. insertable : 등록 가능 여부 default는 true
+3. updatable : 변경 가능 여부 default는 true
+4. nullable(DDL) : null 값의 허용 여부를 설정한다. false로 설정하면 DDL 생성 시에 not null 제약조건이 붙는다
+5. unique(DDL) : @Table의 uniqueConstraints와 같지만 한 컬럼에 간단히 유니크 제 약조건을 걸 때 사용한다.
+   - 잘 사용하지 않는다.(이름이 이상한 이름으로 나온다.)
+6. length(DDL) : 문자 길이 제약조건, String 타입에만 사용한다. defalut 값은 255
+7. columnDefinition (DDL) : 데이터베이스 컬럼 정보를 직접 줄 수 있다.   ex) varchar(100) default ‘EMPTY'
+8. precision, scale(DDL) : 아주 큰 숫자나 소수점을 사용할 때 사용한다.
 
 ## @Enumerated
 1. EnumType.ORDINAL: enum 순서를 데이터베이스에 저장(사용하지 말자)
-  - 만약 새로운 요청사항을 추가해서 적용하면 순서가 꼬여버리는 상황이 나온다.
+   - 만약 새로운 요청사항을 추가해서 적용하면 순서가 꼬여버리는 상황이 나온다.
+
 ```
 enum 클래스 롤타입
 USER, ADMIN
@@ -314,12 +315,37 @@ DB에 게스트가 0 번이 된다. 0, 1, 2 순서
 이렇게 되면 이미 저장되있는 USER도 0번이고  GUEST도 0번인  상황이 발생된다
 
 ```
+
 2. EnumType.STRING: enum 이름을 데이터베이스에 저장
- - enum클래스의 저장된 이름으로 DB에 저장된다.
+   - enum클래스의 저장된 이름으로 DB에 저장된다.
 
 ## @Temporal
 - 과거 버전 사용할떄 사용한다.
   - 요새는 localDate 타입 쓰면된다.
 
-## 
-    
+# 기본키 매핑
+
+## @Id
+- 직접 할당할때 사용
+
+## @GeneratedValue
+- 자동 생성
+
+### IDENTITY 전략
+```
+@GeneratedValue(strategy = GenerationType.IDENTITY)
+```
+- 기본 키 생성을 데이터베이스에 위임
+- 예: MySQL의 AUTO_ INCREMENT
+
+### SEQUENCE 전략
+```
+@GeneratedValue(strategy = GenerationType.SEQUENCE)
+```
+- 데이터베이스 시퀀스는 유일한 값을 순서대로 생성하는 특별한 데이터베이스 오브젝트(예: 오라클 시퀀스)
+1. initialValue : DDL 생성 시에만 사용됨, 시퀀스 DDL을 생성할 때 처음 1 시작하는 수를 지정한다.
+   - default : 1
+2. allocationSize : 시퀀스 한 번 호출에 증가하는 수(성능 최적화에 사용됨 데이터베이스 시퀀스 값이 
+    하나씩 증가하도록 설정되어 있으면 이 값 을 반드시 1로 설정해야 한다
+    - default : 50
+     
