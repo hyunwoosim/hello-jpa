@@ -233,3 +233,54 @@ transaction.commit(); // [트랜잭션] 커밋
 - em.detach(entity) 특정 엔티티만 준영속 상태로 만듬
 - em.clear(entity) 영속성 컨텍스트를 완전 초기화
 - em.close(entity) 영속성 컨텍스트를 종료
+
+# 엔티티 매핑
+
+## @Entity
+    - @Entity가 붙은 클래스는 JPA가 관리하는 엔티티라 한다.
+    - 기본 생성자 필수(파라미어가 없는 public 또는 protected생성자)
+    - default 값은 사용하는 클래스의 이름이다.
+
+## @ Table
+    - @Entity와 매핑할 테이블 지정(데이터베이스의 테이블)
+```
+@Entity
+@Table(name = "MBR")
+public class Member {
+```
+ - Member클래스의 Entity가 데이터베이스의 MBR 테이블과 매핑된다
+```
+Hibernate: 
+    /* insert for
+        hellojpa.Member */insert 
+    into
+        MBR (name, id)   <<=== Member 이름이 MBR로 바뀌었다.
+    values
+        (?, ?)
+```
+
+## 데이터베이스 스키마 자동 생성
+    - 개발 할 때 사용하면 유용하다.
+    - DDL을 애플리케이션 실행 시점에 자동 생성한다.
+```
+<property name="hibernate.hbm2ddl.auto" value="create" />
+```
+- persistence.xml 옵션에 사용한다.
+
+### 옵션
+- Create : 기존테이블 삭제 후 다시 생성 (DROP + CREATE)
+- create-drop : create와 같으나 종료시점에 테이블 DROP
+- update : 변경분만 반영(운영DB에는 사용하면 안됨)
+- validate : 엔티티와 테이블이 정상 매핑되었는지만 확인
+  - 새로운 컬럼을 추가했을때 테이블에 없으면 에러가 뜬다.
+
+### 주의점
+    - 운영 장비에는 절대 create, create-drop, update 사용하면 안된다.
+    - 운영할 때는 다 사용하지 말자
+    - 로컬 pc에서만 사용하는게 좋다.
+
+## DDL 생성기능
+    - DDL 생성 기능은 DDL을 자동 생성할 때만 사용되고 JPA의 실행 로직에는 영향을 주지 않는다.
+```
+@Column(nullable = false, length = 10)
+```
