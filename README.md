@@ -393,5 +393,10 @@ public void changeTeam(Team team) {
 ## 다대일[N:1] @ManyToOne
 - 양방향일땐 외래키가 있는 쪽이 연관 관계 주인
 
+## 일대다[1:N] @OneToMany
+- 일대다 단방향,양방향 매핑보다는 다대일 양방향 매핑을 사용하자
 
- 
+
+
+
+
