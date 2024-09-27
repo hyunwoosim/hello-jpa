@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 
 @Entity
 public class Member {
@@ -19,6 +20,10 @@ public class Member {
 
     @Column(name = "USERNAME")
     private String name;
+
+    @OneToOne
+    @JoinColumn(name = "Locker_ID")
+    private Locker locker;
 
     public Long getId() {
         return id;
