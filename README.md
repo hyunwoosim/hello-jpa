@@ -405,5 +405,129 @@ public void changeTeam(Team team) {
 - 편리해 보이지만 실무에서 사용 X
 
 
+# 고급 매핑
+
+## 상속 관계 매핑
+- Album, Book, Movie가 Item을 상속 받았을 때 
+```
+create table Item (
+        price integer not null,
+        stockQuantity integer not null,
+        ITEM_ID bigint not null,
+        DTYPE varchar(31) not null,
+        actor varchar(255),
+        artist varchar(255),
+        author varchar(255),
+        director varchar(255),
+        isbn varchar(255),
+        name varchar(255),
+        primary key (ITEM_ID)
+    )
+```
+- 이런 식으로 매핑된다.
+
+## 주요 어노테이션 @Inheritance(strategy = )
+
+### 1. InheritanceType.JOINED 조인 전략
+```
+create table Item (
+        price integer not null,
+        ITEM_ID bigint not null,
+        DTYPE varchar(31) not null,
+        name varchar(255),
+        primary key (ITEM_ID)
+    )
+
+create table Album (
+        ITEM_ID bigint not null,
+        artist varchar(255),
+        primary key (ITEM_ID)
+    )
+    
+    create table Book (
+        ITEM_ID bigint not null,
+        author varchar(255),
+        isbn varchar(255),
+        primary key (ITEM_ID)
+    )
+    
+    create table Movie (
+        ITEM_ID bigint not null,
+        actor varchar(255),
+        director varchar(255),
+        primary key (ITEM_ID)
+    )
+    
+```
+
+### 2. InheritanceType.SINGLE_TABLE 단일 테이블 전략
+- 한 테이블에 다 생성된다.
+- 성능이 잘 나온다는 장점
+```
+create table Item (
+        price integer not null,
+        ITEM_ID bigint not null,
+        DTYPE varchar(31) not null,
+        actor varchar(255),
+        artist varchar(255),
+        author varchar(255),
+        director varchar(255),
+        isbn varchar(255),
+        name varchar(255),
+        primary key (ITEM_ID)
+```
+- 단일 테이블 전략은 @DiscriminatorColumn 없어도 자동으로 생성된다.
+
+### 3. InheritanceType.TABLE_PER_CLASS 구현 클래스마다 테이블 전략 
+- 부모 테이블이 만들어지지 않는다.
+- 부모 테이블의 컬럼들을 공통으로 가지고 있는다.
+```
+create table Album (
+        price integer not null,
+        ITEM_ID bigint not null,
+        artist varchar(255),
+        name varchar(255),
+        primary key (ITEM_ID)
+    )
+    
+    create table Book (
+        price integer not null,
+        ITEM_ID bigint not null,
+        author varchar(255),
+        isbn varchar(255),
+        name varchar(255),
+        primary key (ITEM_ID)
+    )
+    
+    create table Movie (
+        price integer not null,
+        ITEM_ID bigint not null,
+        actor varchar(255),
+        director varchar(255),
+        name varchar(255),
+        primary key (ITEM_ID)
+    )
+```
+- 조회 할 떄 모든 테이블을 조회해야 데이터를 찾을 수 있다.
+
+### @DiscriminatorColumn
+- 컬럼에 엔티티 명이 나온다.
+- 부모 클래스에서 설정한다.
+```
+DTYPE - Movie
+DTYPE - Album
+```
+- 데이터 베이스에서 확인하면 바로 알 수 있다.
+
+### @DiscriminatorValue
+- 자식 클래스의 이름 설정하고 싶을 떄 사용
+- 자식 클래스에 설정한다.
+```
+@Entity
+@DiscriminatorValue("M")
+public class Movie extends Item
 
 
+!! DB !!
+DTYPE - M
+```

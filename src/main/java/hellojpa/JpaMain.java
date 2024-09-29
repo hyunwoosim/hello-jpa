@@ -1,5 +1,6 @@
 package hellojpa;
 
+import hellojpa.items.Movie;
 import jakarta.persistence.*;
 import java.util.List;
 
@@ -18,16 +19,18 @@ public class JpaMain {
 
         try {
 
-            Member member = new Member();
-            member.setName("member1");
+            Movie movie = new Movie();
+            movie.setDirector("놀란");
+            movie.setActor("bbbbb");
+            movie.setName("인터스텔라");
+            movie.setPrice(1000);
 
-            em.persist(member);
+            em.persist(movie);
+            
+            em.flush();
+            em.clear();
 
-            Team team = new Team();
-            team.setName("TeamA");
-            team.getMembers().add(member);
 
-            em.persist(team);
 
             tx.commit();
 
