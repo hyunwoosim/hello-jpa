@@ -1,5 +1,6 @@
 package hellojpa;
 
+import hellojpa.items.Book;
 import hellojpa.items.Movie;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -20,11 +21,10 @@ public class JpaMain {
 
         try {
 
-            Member member = new Member();
-            member.setCreatedBy("kim");
-            member.setName("user");
-            member.setCreatedDate(LocalDateTime.now());
-            em.persist(member);
+            Book book = new Book();
+            book.setName("JPA");
+            book.setAuthor("일이삼");
+            em.persist(book);
             
             em.flush();
             em.clear();
