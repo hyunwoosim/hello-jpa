@@ -2,6 +2,7 @@ package hellojpa;
 
 import hellojpa.items.Movie;
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class JpaMain {
@@ -19,13 +20,11 @@ public class JpaMain {
 
         try {
 
-            Movie movie = new Movie();
-            movie.setDirector("놀란");
-            movie.setActor("bbbbb");
-            movie.setName("인터스텔라");
-            movie.setPrice(1000);
-
-            em.persist(movie);
+            Member member = new Member();
+            member.setCreatedBy("kim");
+            member.setName("user");
+            member.setCreatedDate(LocalDateTime.now());
+            em.persist(member);
             
             em.flush();
             em.clear();
