@@ -539,3 +539,107 @@ DTYPE - M
 - 직접 생성해서 사용할 일이 없으므로 추상 클래스 권장
 - 테이블과 관계 없고, 단순히 엔티티가 공통으로 사용하는 매핑 정보를 모으는 역할
 - 주로 등록일, 수정일, 등록자, 수정자 같은 전체 엔티티에서 공통으로 적용하는 정보를 모을 때 사용
+
+# 프록시와 연관 관계
+
+## 프록시
+- em.getReference: 데이터베이스 조회를 미루는 가짜(프록시) 엔티티 객체 조회
+
+### 특징
+-  실제 클래스를 상속 받아서 만들어진다.
+- 실제 클래스와 겉 모양이 같다.
+- 사용하는 입장에서는 진짜 객체인지 프록시 객체인지 구분하지 않고 사용한다.(이론상)
+
+## 특징(중요!!!!)
+- 프록시 객체는 처음 사용할 때 한 번만 초기화(여러번 초기화 안됨)
+- 초기화 할 때, 프록시 객체가 실제 엔티티로 바뀌는 것은 아님, 초기화 되면 프록시 객체를 통해서 실제 엔티티에 접근 가능
+    ```
+         Member findMember = em.getReference(Member.class, member.getId());
+                System.out.println("before findMember = " + findMember.getClass());
+                System.out.println("findMember.id = " + findMember.getId());
+                System.out.println("after findMember = " + findMember.getClass());
+                
+    =========================결과=============================================            
+        before findMember = class hellojpa.Member$HibernateProxy$w9BoyeM4
+        findMember.id = 1
+        after findMember = class hellojpa.Member$HibernateProxy$w9BoyeM4
+    ```
+
+- !!!!프록시 객체는 원본 엔티티를 상속 받는다. 따라서 타입 체크시 주의해야한다.(== 비교는 실패!  instance of 사용해야한다.!!!)
+  1. == 비교
+      ```
+      둘다 .find 일 때
+    
+      Member m1 = em.find(Member.class, member1.getId());
+      Member m2 = em.find(Member.class, member2.getId());
+    
+      System.out.println("m1 == m2: " + (m1.getClass() == m2.getClass()));
+      =====================결과===============================
+    
+      m1 == m2: true 
+      타입 비교기 때문에 true
+      =========================================================
+    
+      find, getReference 일 때
+    
+      Member m1 = em.find(Member.class, member1.getId());
+      Member m2 = em.getReference(Member.class, member2.getId());
+    
+      System.out.println("m1 == m2: " + (m1.getClass() == m2.getClass()));
+      =====================결과===============================
+    
+      m1 == m2: false
+      ```
+    
+  2. instanceof
+     ```
+     System.out.println("m1 == m2: " + (m1 instanceof Member));
+     System.out.println("m1 == m2: " + (m2 instanceof Member));
+     =====================결과===============================
+    
+     m1 == m2: true
+     m1 == m2: true
+     ```
+
+- !!!! 영속성 컨텍스트에 찾는 엔티티가 이미 있으면 getReference()를 호출해도 실제 엔티티를 반환한다.
+    ```
+    Member m1 = em.find(Member.class, member1.getId());
+    System.out.println("m1 = " + m1.getClass());
+    
+    Member reference = em.getReference(Member.class, member1.getId());
+    System.out.println("reference.getClass() = " + reference.getClass());
+    =====================결과===============================
+    
+    m1 = class hellojpa.Member
+    reference.getClass() = class hellojpa.Member
+    ```
+
+- !!!!!!영속성 컨텍스트의 도움을 받을 수 없는 준영속 상태일 때, 프록시를 초기화하면 문제 발생
+  - em.detach(), em.clear(), em.close()ß
+    ```
+      Member refMember = em.getReference(Member.class, member1.getId());
+      System.out.println("refMember = " + refMember.getClass()); // Proxy
+        
+      em.detach(refMember);
+        
+      refMember.getName();
+        
+      =====================결과===============================
+      refMember = class hellojpa.Member$HibernateProxy$jRFrGpp6
+      org.hibernate.LazyInitializationException: could not initialize proxy [hellojpa.Member#1] - no Session
+    ```
+
+### 프록시 확인
+1. 프록시 인스턴스의 초기화 여부 확인
+    - .getPersistenceUnitUtil().isLoaded()
+        ```
+        Member refMember = em.getReference(Member.class, member1.getId());
+        System.out.println("isLoaded = " + emf.getPersistenceUnitUtil().isLoaded(refMember));
+        =====================결과===============================
+        
+        refMember = class hellojpa.Member$HibernateProxy$AZ95Tr81
+        isLoaded = false
+        ```
+      
+2. 프록시 강제 초기화
+    - Hibernate.initialize(refMember);
