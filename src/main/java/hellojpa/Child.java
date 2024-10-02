@@ -1,6 +1,9 @@
 package hellojpa;
 
+import static jakarta.persistence.FetchType.*;
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -15,7 +18,7 @@ public class Child {
 
     private String name;
 
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "parent_id")
     private Parent parent;
 
