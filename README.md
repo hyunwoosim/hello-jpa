@@ -663,7 +663,7 @@ DTYPE - M
   - 예: 부모 엔티티를 저장할 때 자식 엔티티도 함께 저장.
     ```
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
-    private List<Child> childList = new ArrayList<>();
+    private List<Child> childList = new ArrayList<>(); 
     ```
 
 # 고아 객체
@@ -671,3 +671,32 @@ DTYPE - M
 - 참조가 제거된 엔티티는 다른 곳에서 참조하지 않는 고아 객체로 보고 삭제하는 기능
 ### 특정 엔티티가 개인 소유할 때 사용
 - CascadeType.REMOVE처럼 동작한다
+
+
+# 값 타입
+
+## JPA의 데이터 타입 분류
+1. 엔티티 타입
+   - 데이터가 변해도 식별자로 지속해서 추적 가능
+
+2. 값 타입
+   - int, Integer, String처럼 단순히 값으로 사용하는 자바 기본 타입이나 객체
+   - 식별자가 없고 값만 있으므로 변경시 추적 불가
+
+
+### 값 타입의 분류
+1. 기본값 타입
+   - 자바 기본 타입(int, double)
+   - 래퍼 클래스(Integer,Long)
+   - String
+
+2. 임베디드 타입(embedded type, 복합 값 타입)
+
+3. 컬렉션 값 타입(collection value type)
+
+## 기본 값 타입
+- 생명주기를 엔티티의 의존
+  - 예) 회원을 삭제하면 이름, 나이필드도 함께 삭제
+- 값 타입은 공유 X
+  - 회원 이름 변경시 다른 회원 이름도 변경되면 안된다.
+
