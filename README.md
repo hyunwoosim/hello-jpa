@@ -656,6 +656,18 @@ DTYPE - M
 ## 프록시와 즉시로딩 주의
 - 가급적 지연 로딩만 사용하자(특히 실무에서)
 - 즉시 로딩을 적용하면 예상하지 못한 SQL이 발생할 수 있다.
-### !!!! @ManyToOne, @OneToOne은 기본이 즉시로딩이다. ==>>  LAZY로 설정해야한다. !!!!
+### !!!! @ManyToOne, @OneToOne은 기본이 즉시로딩이다. ==>>  LAZY로 설정해야한다. !!!
 
+# 영속성 전이 : CASCADE
+- 특정 엔티티를 영속 상태로 만들 때 연관된 엔티티도 함께 영속 상태로 만들도 싶을 때
+  - 예: 부모 엔티티를 저장할 때 자식 엔티티도 함께 저장.
+    ```
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
+    private List<Child> childList = new ArrayList<>();
+    ```
 
+# 고아 객체
+- 고아 객체 제거: 부모 엔티티와 연관관계가 끊어진 자식 엔티티를 자동으로 삭제
+- 참조가 제거된 엔티티는 다른 곳에서 참조하지 않는 고아 객체로 보고 삭제하는 기능
+### 특정 엔티티가 개인 소유할 때 사용
+- CascadeType.REMOVE처럼 동작한다
