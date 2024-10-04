@@ -15,12 +15,9 @@ public class Member {
     private Long id;
 
     @Column(name = "USERNAME")
-    private String name;
+    private String username;
 
     private int age;
-
-    @Embedded
-    private Period workPeriod;
 
     //주소
     @Embedded
@@ -42,21 +39,14 @@ public class Member {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public Period getWorkPeriod() {
-        return workPeriod;
-    }
-
-    public void setWorkPeriod(Period workPeriod) {
-        this.workPeriod = workPeriod;
-    }
 
     public Address getAddress() {
         return address;

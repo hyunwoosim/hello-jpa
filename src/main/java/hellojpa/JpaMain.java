@@ -25,6 +25,18 @@ public class JpaMain {
         try {
 
             Member member = new Member();
+            member.setUsername("member1");
+            member.setAge(10);
+            em.persist(member);
+
+            em.flush();
+            em.clear();
+
+            List<Member> result = em.createQuery("select m from Member m", Member.class)
+                .getResultList();
+
+            Member findMember = result.get(0);
+            findMember.setAge(20);
 
             tx.commit();
 

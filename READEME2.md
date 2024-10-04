@@ -44,3 +44,15 @@ Query query = em.createQuery("SELECT m.username, m.age from Member m");
    1. 결과가 없으면: javax.persistence.NoResultException
    2.둘 이상이면: javax.persistence.NonUniqueResultException
    ```
+   
+# 프로젝션
+- Select절에 조회할 대상을 지정하는 것
+- 프로젝션 대상 : 엔티티, 임베디드 타입, 스칼라 타입(숫자, 문자등 기본 데이터 타입)
+
+## new 명령어로 조회
+1. 단순 값을 DTO로 바로 조회
+```
+SELECT new jpabook.jpql.UserDTO(m.username, m.age) FROM Member m
+```
+2. 패키지 명을 포함한 전체 클래스 명 입력
+3. 순서와 타입이 일치하는 생성자 필요
