@@ -1,15 +1,13 @@
 package hellojpa;
 
-import hellojpa.items.Book;
-import hellojpa.items.Movie;
-import jakarta.persistence.*;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Persistence;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
-import org.hibernate.Hibernate;
 
 public class JpaMain {
 
@@ -26,12 +24,7 @@ public class JpaMain {
 
         try {
 
-            CriteriaBuilder cb = em.getCriteriaBuilder();
-            CriteriaQuery<Member> query = cb.createQuery(Member.class);
-
-            Root<Member> m = query.from(Member.class);
-            CriteriaQuery<Member> cq = query.select(m).where(cb.equal(m.get("name"), "kim"));
-            List<Member> resultList = em.createQuery(cq).getResultList();
+            Member member = new Member();
 
             tx.commit();
 

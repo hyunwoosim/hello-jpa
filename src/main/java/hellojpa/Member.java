@@ -17,12 +17,22 @@ public class Member {
     @Column(name = "USERNAME")
     private String name;
 
+    private int age;
+
     @Embedded
     private Period workPeriod;
 
     //주소
     @Embedded
     private Address address;
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
 
     public Long getId() {
         return id;

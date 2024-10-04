@@ -20,3 +20,27 @@
 4. 실무 사용 권장
 
 
+# JPQL 기본 문법 기능
+
+## TypeQuery, Query
+
+1. TypeQuery: 반환 타입이 명확할 때 사용
+```
+TypedQuery<Member> query = em.createQuery("SELECT m FROM Member m", Member.class);
+
+```
+2. Query: 반환 타입이 명확하지 않을 때 사용
+```
+Query query = em.createQuery("SELECT m.username, m.age from Member m");
+```
+
+## 결과 조회 API
+1. query.getResultList(): 결과가 하나 이상일 때, 리스트 반환
+   - 결과과 없으면 빈 리스트 반환
+
+2. query.getSingleResult(): 결과가 정확히 하나, 단일 객체 반환
+   - 결과가 안나오면 Exceiption 터트린다.
+   ```
+   1. 결과가 없으면: javax.persistence.NoResultException
+   2.둘 이상이면: javax.persistence.NonUniqueResultException
+   ```
