@@ -81,3 +81,28 @@ SELECT new jpabook.jpql.UserDTO(m.username, m.age) FROM Member m
 # JPQL 타입 표현
 1. ENUM: jpabook.MemberType.Admin (패키지명 포함)
 2. 엔티티 타입: TYPE(m) = Member (상속 관계에서 사용)
+
+# 조건식 - case 식
+## 1. 기본 CASE 식
+```
+select
+      case when m.age <= 10 then '학생요금'
+      when m.age >= 60 then '경로요금'
+      else '일반요금'
+   end
+from Member m
+```
+## 2. 단순 CASE 식
+```
+select
+      case t.name
+      when '팀A' then '인센티브110%'
+      when '팀B' then '인센티브120%'
+      else '인센티브105%'
+   end
+from Team t
+```
+
+## 3. 조건식- CASE
+1. COALESCE: 하나씩 조회해서 null이 아니면 반환
+2. NULLIF: 두 값이 같으면 null 반환, 다르면 첫번째 값 반환
