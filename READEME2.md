@@ -60,3 +60,6 @@ SELECT new jpabook.jpql.UserDTO(m.username, m.age) FROM Member m
 # 페이징 API
 1. setFirstResult(int startPosition) : 조회 시작 위치 (0부터 시작)
 2. setMaxResults(int maxResult) : 조회할 데이터 수
+
+# 조인
+- 엔티티 중심의 조인이다.

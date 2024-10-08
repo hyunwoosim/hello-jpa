@@ -4,9 +4,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Root;
 import java.util.List;
 
 public class JpaMain {
@@ -32,12 +29,13 @@ public class JpaMain {
             em.flush();
             em.clear();
 
-            em.createQuery("select m from Member m order by m.age desc", Member.class)
+            String query = "select m from Member m order by m.age desc";
+            List<Member> result = em.createQuery(query, Member.class)
                 .setFirstResult(0)
                 .setMaxResults(10)
                 .getResultList();
 
-            System.out.println("member = " + member);
+
 
             tx.commit();
 
