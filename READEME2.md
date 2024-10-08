@@ -56,3 +56,7 @@ SELECT new jpabook.jpql.UserDTO(m.username, m.age) FROM Member m
 ```
 2. 패키지 명을 포함한 전체 클래스 명 입력
 3. 순서와 타입이 일치하는 생성자 필요
+
+# 페이징 API
+1. setFirstResult(int startPosition) : 조회 시작 위치 (0부터 시작)
+2. setMaxResults(int maxResult) : 조회할 데이터 수

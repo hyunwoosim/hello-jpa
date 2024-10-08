@@ -32,11 +32,12 @@ public class JpaMain {
             em.flush();
             em.clear();
 
-            List<Member> result = em.createQuery("select m from Member m", Member.class)
+            em.createQuery("select m from Member m order by m.age desc", Member.class)
+                .setFirstResult(0)
+                .setMaxResults(10)
                 .getResultList();
 
-            Member findMember = result.get(0);
-            findMember.setAge(20);
+            System.out.println("member = " + member);
 
             tx.commit();
 

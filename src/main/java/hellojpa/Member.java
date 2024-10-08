@@ -55,4 +55,14 @@ public class Member {
     public void setAddress(Address address) {
         this.address = address;
     }
+
+    @Override
+    public String toString() {
+        return "Member{" +
+            "id=" + id +
+            ", username='" + username + '\'' +
+            ", age=" + age +
+            ", address=" + address +
+            '}';
+    }
 }
