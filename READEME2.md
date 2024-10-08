@@ -63,3 +63,16 @@ SELECT new jpabook.jpql.UserDTO(m.username, m.age) FROM Member m
 
 # 조인
 - 엔티티 중심의 조인이다.
+
+# 서브 쿼리
+
+## 지원 함수
+1. [NOT] EXISTS (subquery): 서브쿼리에 결과가 존재하면 참
+   1. {ALL | ANY | SOME} (subquery)
+   2. ALL 모두 만족하면 참
+   3. ANY, SOME: 같은 의미, 조건을 하나라도 만족하면 참
+2. [NOT] IN (subquery): 서브쿼리의 결과 중 하나라도 같은 것이 있으면 참
+
+## JPA 서브 쿼리 한계
+1. JPA는 WHERE, HAVING 절에서만 서브 쿼리 사용 가능
+2. SELECT 절도 가능(하이버네이트에서 지원)
