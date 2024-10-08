@@ -132,3 +132,40 @@ where t.name = '팀A'
 3. 컬렉션 값 연관 경로: 묵시적 내부 조인 발생, 탐색X
    - FROM 절에서 명시적 조인을 통해 별칭을 얻으면 별칭을 통해서 탐색 가능
 ### 실무에서는 명시적 조인을 사용하자 
+
+
+# fetch join (매우 중요!!!!!!!!!)
+- JPQL에서 성능 최적화를 위해 제공하는 기능
+- 연관된 엔티티나 컬렉션을 SQL 한 번에 함께 조회 기능
+
+## 엔티티 fetch join
+```
+[JPQL]
+select m from Member m join fetch m.team
+
+[SQL]
+SELECT M.*, T.* FROM MEMBER M INNER JOIN TEAM T ON M.TEAM_ID=T.ID
+```
+
+## 컬렉션 fetch join
+- 일대다 관계, 컬렉션 페치 조인
+```
+[JPQL]
+select t from Team t join fetch t.members where t.name = ‘팀A'
+
+[SQL]
+SELECT T.*, M.* FROM TEAM T INNER JOIN MEMBER M ON T.ID=M.TEAM_ID WHERE T.NAME = '팀A'
+```
+
+## fetch 조인과 DISTINCT
+- SQL의 DISTINCT는 중복된 결과를 제거하는 명령
+- JPQL의 DISTINCT 2가지 기능 제공
+  1. SQL에 DISTINCT를 추가
+  2. 애플리케이션에서 엔티티 중복 제거
+
+### 하이버네이트6 부터는 DISTINCT 명령어를 사용하지 않아도 애플리케이션에서 중복 제거가 자동으로 적용된다.
+
+## fetch 조인의 한계
+1. 페치 조인 대상에는 별칭을 줄 수 없다
+2. 둘 이상의 컬렉션은 페치 조인 할 수 없다.
+3. 컬렉션을 페치 조인하면 페이징 API(setFirstResult, setMaxResults)를 사용할 수 없다.

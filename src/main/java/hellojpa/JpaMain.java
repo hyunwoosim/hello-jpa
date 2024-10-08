@@ -20,10 +20,11 @@ public class JpaMain {
         tx.begin();
 
         try {
+            Team teamA = new Team();
 
             Member member = new Member();
-            member.setUsername("member1");
-            member.setAge(10);
+            member.setUsername("회원1");
+
             em.persist(member);
 
             em.flush();
