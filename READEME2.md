@@ -106,3 +106,29 @@ from Team t
 ## 3. 조건식- CASE
 1. COALESCE: 하나씩 조회해서 null이 아니면 반환
 2. NULLIF: 두 값이 같으면 null 반환, 다르면 첫번째 값 반환
+
+# JPQL 기본 함수
+
+# 경로 표현식
+- .(점)을 찍어 객체 그래프를 탐색하는 것
+```
+select m.username -> 상태 필드
+   from Member m
+   join m.team t -> 단일 값 연관 필드
+   join m.orders o -> 컬렉션 값 연관 필드
+where t.name = '팀A'
+```
+
+1. 상태 필드
+   - 상태 필드(state field): 단순히 값을 저장하기 위한 필드 (ex: m.username)
+2. 연관 필드
+-  연관 필드(association field): 연관관계를 위한 필드
+    - 단일 값 연관 필드: @ManyToOne, @OneToOne, 대상이 엔티티(ex: m.team)
+    - 컬렉션 값 연관 필드: @OneToMany, @ManyToMany, 대상이 컬렉션(ex: m.orders)
+
+## 경로 표현식 특징
+1. 상태 필드(state field): 경로 탐색의 끝, 탐색X
+2. 단일 값 연관 경로: 묵시적 내부 조인(inner join) 발생, 탐색O
+3. 컬렉션 값 연관 경로: 묵시적 내부 조인 발생, 탐색X
+   - FROM 절에서 명시적 조인을 통해 별칭을 얻으면 별칭을 통해서 탐색 가능
+### 실무에서는 명시적 조인을 사용하자 
