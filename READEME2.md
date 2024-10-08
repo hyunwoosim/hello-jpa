@@ -76,3 +76,8 @@ SELECT new jpabook.jpql.UserDTO(m.username, m.age) FROM Member m
 ## JPA 서브 쿼리 한계
 1. JPA는 WHERE, HAVING 절에서만 서브 쿼리 사용 가능
 2. SELECT 절도 가능(하이버네이트에서 지원)
+
+
+# JPQL 타입 표현
+1. ENUM: jpabook.MemberType.Admin (패키지명 포함)
+2. 엔티티 타입: TYPE(m) = Member (상속 관계에서 사용)
